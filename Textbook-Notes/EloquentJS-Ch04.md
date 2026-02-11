@@ -19,3 +19,19 @@ cosnole.log("right" in anobject); // prints true
 
 
 ### Mutability 
+- With objects, there is a difference between having two references to the same object and having two different objects that contain the same properties
+```javascript
+let object1 = {value: 10}; 
+let object2 = object1; 
+let object3 = {value: 10}; 
+
+console.log(object1 == object2); // true
+console.log(object1 == object3); // false
+```
+- Note: If you declare an object with the keyword `const`, the object itself cannot be changed, BUT the contents of that object CAN be changed 
+```javascript
+const score = { visitors: 0, home: 0 }; 
+const score.home = 1; // valid 
+const score = { visitors: 1, home: 1 }; // invalid 
+```
+> When you compare objects with JavaScript’s `==` operator, it compares by identity: it will produce `true` only if both objects are precisely the same value. Comparing different objects will return `false`, even if they have identical properties. 
