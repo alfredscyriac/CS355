@@ -1,6 +1,6 @@
 # CS355 - Topic 2: JavaScript Memory Management
 
-**Dates:** February 2, 2026 and February 4, 2026
+**Dates:** February 2, 2026 and February 11, 2026
 ---
 
 ## February 2: 
@@ -251,6 +251,65 @@ console.log(j);
 
 ---
 
-## February 4: 
+## February 11: 
+
+### Scope Review 
+- Global scope variables are declared without keywords and can be used anywhere in the program 
+- Function scope variables are declared using the keyword `var` and can be used anywhere within the function it was declared in
+  - Note: Arguments passed into a function also are function scope variables 
+- Block / Lexical scope variables are declared using keywords `const` or `let` and it's scope is between the set of curly braces it was declared in
+- Lexical declaration cannot exist in a single line context. This is due to the fact `const` and `let` can only exist inside a block nested by curly braces. Without braces, JavaScript has no scope to give these variables thereby throwing a `SyntaxError`. Thus the following code throws an error: 
+```javascript
+if (true) 
+    let x = 5; 
+```
+- The fix to the above error is very simple, just wrap the body of the if-statement in a set of curly braces like so: 
+```javascript
+if (true) {
+    let x = 5; 
+}
+```
+
+### What happens when we make a function call? 
+- JavaScript allows nested child functions to access needed parent variables by closure
+- A function call invokes a new stack frame 
 
 
+### Higher-Order Functions 
+- Case 1: A function that takes another function as input 
+- Example of Case 1: 
+```javascript
+[1, 2, 3, 4].map(x => x * 2); // [2, 3, 6, 8]
+```
+- The function `map` is a higher-order function as it takes a function as input
+- Case 2: A function that returns another function as output 
+- Example of Case 2: 
+```javascript
+function adder(x){
+    return function(y){
+        return x + y; 
+    }
+}
+```
+- The function `adder` is a higher-order function because it returns another function as it's output 
+- Case 3: A function that takes another function as input AND returns another function as output
+- Example of Case 3:
+```javascript
+function not(func){
+    return function(...x){
+        return !func(...x); 
+    }
+}; 
+
+let isEven = x => x % 2 == 0; 
+let isOdd = not(isEven); 
+```
+- The `not` function is a higher-order function. The input for the `not` function is another function wuth boolean return value and the output is a function that behaves the exact opposite of the original 
+> Side note: The `isOdd` function is NOT "dependent" on `isEven`, meaning if after this code block we added `isEven = null;`, we can still use `isOdd()` without a problem. This is due to how the pointers work in the memory management. `isEven = null` is not removing the function definition from the heap, so `isOdd()` is still able to access the function definition of `isEven()` using a pointer to it's memory address
+
+### Memory Management 
+- Closure: Preservation of access to variables that a function depends on to exist. This crucial when you have a nested function and the inner child function, needs parameters or variables declared in the outter parent function to execute 
+- The way we learn closure is that when the inner child function gets added to the heap memory, after the function definition there is an object called `env` where the property names are the variables the inner child function needs from the outer parent function and the values are pointers to these specific variables memory addresses. It is important to note we are not storing the value itself, but rather the memory address of the variable so that if it ever updates we get the most up to date value
+- Garbage Collection: When we create variables, objects, or functions, JavaScript allocates space in the memory for them whether it be on the stack or the heap. When they're no longer reachable (nothing in your program can access them anymore), the garbage collector frees that memory automatically. We don't have to call the garbage collector, it runs by itself at random times. 
+- The garbage collector starts from what is referred to as the roots which are global variables, and any identifiers on the main call stack
+- Everything that is referenced from the root, whether it be directly or through a chain of calls, is preserved. Everything else is garbage collected to free up memory 
