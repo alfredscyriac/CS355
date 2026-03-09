@@ -12,8 +12,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\${file}",
-            "console": "externalTerminal"
+            "program": "${workspaceFolder}\\${file}"
         }
     ]
 }
