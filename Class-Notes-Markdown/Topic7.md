@@ -1,4 +1,4 @@
-# CS 355 - Topic 6: Network Layer
+# CS 355 - Topic 7: Network Layer
 
 **Dates:** March 9, 2026 and March 16, 2026
 ---
